@@ -1,35 +1,50 @@
-let id = 0;
-let messages = [];
+let messages = []
+let id = 0
 
 module.exports = {
-    createMessages: (req, res) => {
-        console.log("hit")
-        const  {text, time} = req.body;
-        messages.push({id, text, time})
+
+    read: (req, res) => {
+        res.status(200).send(messages)
+    },
+
+    create: (req, res) => {
+        const {text, time} = req.body
+        const message = {
+            id,
+            text,
+            time
+        }
+        messages.push(message)
         id++
         res.status(200).send(messages)
-        
     },
-    readMessages: (req ,res ) => {
-        res.status(200).send( messages );
-    },
-    updateMessages: (req, res) => {
-        const { text } = req.body;
-        const { id } = req.params;
-        const messageIndex = messages.findIndex( message => message.id == id );
-        let message = messages[ messageIndex ];
 
-        message = {
-            id: message.id,
-            text: text || message.text,
-            time: message.time
-        };
-        res.status(200).send( messages )
+    update: (req, res) => {
+        const {text, time} = req.body
+        const {id} = req.params
+        let index = null
+        messages.forEach((message, i) => {
+            if(message.id === id * 1){
+                index = i
+            }
+        })
+        messages[index] = {
+            id: id,
+            text: text,
+            time: time
+        }
+        res.status(200).send(messages)
     },
-    deleteMessages: (req, res) => {
-        const deleteId =  req.params.id;
-        messageIndex = messages.findIndex( message => message.id == deleteID );
-        messages.splice(messageIndex, 1);
-        res.status(200).send( messages );
+
+    delete: (req, res) => {
+        let index = null
+        const {id} = req.params
+        messages.forEach((message, i) => {
+            if(message.id === id * 1){
+                index = i
+            }
+        })
+        messages.splice(index, 1)
+        res.status(200).send(messages)
     }
-};
+}

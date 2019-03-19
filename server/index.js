@@ -1,18 +1,15 @@
-const bodyParser = require('body-parser')
-const ctrl = require('./controllers/messages_controller')
 const express = require('express')
+const bodyParser = require('body-parser')
+const mc = require('./controllers/messages_controller')
+const app = express()
 
-const app = express();
+app.use(bodyParser.json())
 
-app.use( bodyParser.json() );
+app.get('/api/messages', mc.read)
+app.post('/api/messages', mc.create)
+app.put('/api/messages/:id', mc.update)
+app.delete('/api/messages/:id', mc.delete)
 
-app.post ('/api/messages', ctrl.createMessages)
-app.get ('/api/messages', ctrl.readMessages)
-app.put('/api/messages', ctrl.updateMessages)
-app.delete ('/api/message', ctrl.deleteMessages)
+const port = 3001
 
-
-
-
-
-app.listen(3001, () => console.log('I WIN 2'))
+app.listen(port, () => console.log(`listening on ${port}`))
